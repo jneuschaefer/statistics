@@ -1,0 +1,66 @@
+\documentclass[a4paper]{article}
+\usepackage[scale=0.8]{geometry}
+\usepackage{aligned-overset, amssymb, amsthm, color, bbm, enumitem, hyperref, mathtools, tcolorbox}
+\theoremstyle{definition}
+\newtheorem{solution}{solution}
+\newcommand*{\N}{\mathbb{N}}
+\DeclareMathOperator{\grad}{grad}
+\title{\vspace{-2.5\baselineskip}Statistics -- assignment no.~2}
+\author{Jonas Neuschäfer}
+\begin{document}
+\maketitle
+\addtocounter{solution}{9}
+\begin{solution}
+As our sample space $\Omega$, we use $\Omega \coloneqq \{1, 2, \ldots, 1000\}$, and we define our probability measure $P$ as usual by $P(A) = \frac{|A|}{|\Omega|} = \frac{|A|}{1000}$ for each event $A \subset \Omega$. Consider the events
+\begin{equation*}
+A_k := \{\omega \in \Omega : \omega \text{ is divisible by } k\}, \quad k = 2, 3, \ldots
+\end{equation*}
+We want to compute $P(A_3 \cup A_5 \cup A_7)$. But attention! The events $A_3$, $A_5$, and $A_7$ are not pairwise disjoint. E.g., obviously the natural number $15 \in A_3 \cap A_5$. In this case, we can use the inclusion-exclusion formula:
+\begin{tcolorbox}[colback=blue!5!white, colframe=blue!75!black, title=Inclusion-Exclusion Principle]
+For two events $A$ and $B$ (easy, we already know that), we have:
+\begin{equation*}
+P(A \cup B) = P(A) + P(B) - P(A \cap B).
+\end{equation*}
+This also works for three events $A$, $B$, and $C$, where we must \color{red}subtract the pairwise intersections\color{black}, but then the \color{green}intersection of all three\color{black}~is subtracted as well (which we do not want because it is clearly included) and must be \color{green} added back\color{black} (draw a Venn-diagram to verify the 3 steps (all three - subtract intersections - but then observe that $A \cap B \cap C$ is removed, hence add it back):
+\begin{align}
+P(A \cup B \cup C) &= P(A) + P(B) + P(C) \\
+&\quad \color{red}- P(A \cap B) - P(A \cap C) - P(B \cap C) \\
+&\quad \color{green}+ P(A \cap B \cap C).
+\end{align}
+Btw: The same procedure can be applied to unions of 4 (where then a fourth line is added above with intersec. of all four sets), 5, 6, and so on\dots
+\end{tcolorbox}
+Hence, in our case:
+\begin{align*}
+P(A_3 \cup A_5 \cup A_7) &= P(A_3) + P(A_5) + P(A_7) \\
+&\quad - P(A_3 \cap A_5) - P(A_3 \cap A_7) - P(A_5 \cap A_7) \\
+&\quad + P(A_3 \cap A_5 \cap A_7).
+\end{align*}
+Therefore, we just have to calculate the probabilities of all the sets above. Note that a natural number \color{green}$m$\color{black}~which is divisible by \color{red}$k$\color{black}~can be written in the form $\color{red}$k$\color{black}\color{blue}$n$\color{black} = \color{green}$m$\color{black}$, where \color{blue}$n$\color{black}~is another natural number (example: \color{green}10\color{black} = \color{red}5\color{black}*\color{blue}2\color{black}). So we write our events $A_k$ in the form
+\begin{equation*}
+A_k  = \{\omega \in \Omega : \omega \text{ is divisible by } k\} = \{kn : n \in \N, \; \underbrace{n \leq \left\lfloor \frac{1000}{k} \right\rfloor}_{\text{to ensure that $kn \leq 1000$}}\},
+\end{equation*}
+where $\left\lfloor x \right\rfloor$ denotes the greatest integer less than or equal to x (example: $\left\lfloor 333.33 \right\rfloor = 333$. We see that
+\begin{equation*}
+P(A_k) = \frac{|A_k|}{|\Omega|} = \frac{1}{1000}|A_k| =\frac{1}{1000} \left\lfloor \frac{1000}{k} \right\rfloor.
+\end{equation*}
+In particular:
+\begin{align*}
+P(A_3) &= \frac{\lfloor 1000/3 \rfloor}{1000} = \frac{333}{1000}, \\
+P(A_5) &= \frac{\lfloor 1000/5 \rfloor}{1000} = \frac{200}{1000}, \\
+P(A_7) &= \frac{\lfloor 1000/7 \rfloor}{1000} = \frac{142}{1000}.
+\end{align*}
+An integer is divisible by $3$ and $5$ if and only if it is divisible by $3 \cdot 5 = 15$. Thus:
+\begin{align*}
+P(A_3 \cap A_5) &= P(A_{3*5}) = P(A_{15}) = \frac{\lfloor 1000/15 \rfloor}{1000} = \frac{66}{1000}, \\
+P(A_3 \cap A_7) &= P(A_{3*7}) = P(A_{21}) =\frac{\lfloor 1000/21 \rfloor}{1000} = \frac{47}{1000}, \\
+P(A_5 \cap A_7) &= P(A_{5*7}) = P(A_{35}) =\frac{\lfloor 1000/35 \rfloor}{1000} = \frac{28}{1000}, \\
+P(A_3 \cap A_5 \cap A_7) &= P(A_{3*5*7}) = P(A_{105}) = \frac{\lfloor 1000/105 \rfloor}{1000} = \frac{9}{1000}.
+\end{align*}
+Altogether, we have:
+\begin{align*}
+P(A_3 \cup A_5 \cup A_7) &= \frac{333 + 200 + 142 - 66 - 47 - 28 + 9}{1000} \\
+&= \frac{543}{1000}.
+\end{align*}
+\textbf{Answer:} $\boxed{54.3\%}$
+\end{solution}
+\end{document}
